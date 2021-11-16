@@ -43,20 +43,6 @@ class PostSerializer(serializers.ModelSerializer):
             )
         ]
 
-    # def create(self, validated_data):
-    #     if 'comments' not in self.initial_data:
-    #         post = Post.objects.create(**validated_data)
-    #         return post
-    #     else:
-    #         comments = validated_data.pop('comments')
-    #         post = Post.objects.create(**validated_data)
-    #         for comment in comments:
-    #             current_comment, status = Comment.objects.get_or_create(
-    #                 **comment)
-    #             Comment.objects.create(
-    #                 comment=current_comment, post=post)
-    #         return post
-
 
 class GroupSerializer(serializers.ModelSerializer):
     posts = serializers.StringRelatedField(
