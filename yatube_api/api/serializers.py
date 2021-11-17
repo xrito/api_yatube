@@ -36,12 +36,6 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'text', 'author', 'image',
                   'group', 'pub_date', 'comments')
-        validators = [
-            UniqueTogetherValidator(
-                queryset=Post.objects.all(),
-                fields=('text',)
-            )
-        ]
 
 
 class GroupSerializer(serializers.ModelSerializer):
