@@ -39,9 +39,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
 
     def get_queryset(self):
-        # Получаем id котика из эндпоинта
         post_id = self.kwargs.get("post_id")
-        # И отбираем только нужные комментарии
         new_queryset = Comment.objects.filter(post=post_id)
         return new_queryset
 
