@@ -1,50 +1,41 @@
-from posts.models import Comment, Group, Post, User
 from rest_framework import serializers
+from rest_framework.serializers import SlugRelatedField
+
+from posts.models import Comment, Group, Post, User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    posts = serializers.PrimaryKeyRelatedField(
-        many=True, read_only=True)
-    comments = serializers.PrimaryKeyRelatedField(
-        many=True, read_only=True)
+    posts = SlugRelatedField(
+        many=True, read_only=True, slug_field='posts')
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name',
-                  'last_name', 'posts', 'comments')
+        fields = '__all__'
         ref_name = 'ReadOnlyUsers'
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(
-        source='author.username', read_only=True)
+    author = SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:
         model = Comment
-        fields = ('id', 'author', 'text', 'post', 'created')
+        fields = '__all__'
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(
-        source='author.username', read_only=True,
-        default=serializers.CurrentUserDefault())
-    group = serializers.PrimaryKeyRelatedField(read_only=True)
+    author = SlugRelatedField(slug_field='username', read_only=True)
     comments = CommentSerializer(many=True, required=False)
 
     class Meta:
         model = Post
-        fields = ('id', 'text', 'author', 'image',
-                  'group', 'pub_date', 'comments')
+        fields = '__all__'
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    posts = serializers.StringRelatedField(
-        many=True, read_only=True)
 
     class Meta:
         model = Group
-        fields = ('id', 'title', 'slug', 'description', 'posts')
-        read_only_field = ('id', 'title', 'slug', 'description', 'posts')
+        fields = '__all__'
 
     def validate(self, data):
         if data['title'] == data['description']:
